@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OSSD Program – ICEC</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #0B1F3A;
+      --red:    #C8102E;
+      --gold:   #E8A020;
+      --cream:  #F7F4EF;
+      --white:  #FFFFFF;
+      --gray:   #6B7280;
+      --light:  #EEF2F7;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--navy);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5vw;
+      height: 72px;
+      background: rgba(11,31,58,0.96);
+      backdrop-filter: blur(12px);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 12px; }
+    .nav-logo-icon {
+      width: 40px; height: 40px; border-radius: 8px;
+      background: var(--red);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-weight: 900; font-size: 18px; color: #fff;
+    }
+    .nav-logo-text { color: #fff; font-weight: 600; font-size: 15px; letter-spacing: 0.03em; }
+    .nav-logo-sub  { color: rgba(255,255,255,0.5); font-size: 11px; display: block; }
+    nav ul { display: flex; gap: 32px; list-style: none; }
+    nav ul a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 14px; font-weight: 500; transition: color .2s; }
+    nav ul a:hover { color: var(--gold); }
+    .nav-cta {
+      background: var(--red); color: #fff; border: none;
+      padding: 10px 22px; border-radius: 6px;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      transition: background .2s;
+    }
+    .nav-cta:hover { background: #a80d25; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      background: var(--navy);
+      display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      padding: 100px 5vw 60px;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 70% 50%, rgba(200,16,46,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 20% 80%, rgba(232,160,32,0.08) 0%, transparent 60%);
+    }
+    .hero-maple {
+      position: absolute; right: -4vw; top: 50%; transform: translateY(-50%);
+      font-size: clamp(180px, 26vw, 380px);
+      opacity: 0.04; user-select: none; line-height: 1;
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 700px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(200,16,46,0.15);
+      border: 1px solid rgba(200,16,46,0.4);
+      color: #ff8fa3; border-radius: 100px;
+      padding: 6px 16px; font-size: 13px; font-weight: 500;
+      margin-bottom: 28px;
+      animation: fadeUp .6s ease both;
+    }
+    .hero-badge::before { content: '🍁'; }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(38px, 6vw, 72px);
+      font-weight: 900; line-height: 1.08;
+      color: #fff;
+      animation: fadeUp .7s .1s ease both;
+    }
+    h1 span { color: var(--gold); }
+    .hero-sub {
+      margin-top: 22px;
+      font-size: clamp(16px, 2vw, 19px);
+      color: rgba(255,255,255,0.65);
+      line-height: 1.7; max-width: 560px;
+      animation: fadeUp .7s .2s ease both;
+    }
+    .hero-btns {
+      margin-top: 36px; display: flex; gap: 14px; flex-wrap: wrap;
+      animation: fadeUp .7s .3s ease both;
+    }
+    .btn-primary {
+      background: var(--red); color: #fff;
+      padding: 14px 28px; border-radius: 8px;
+      font-weight: 600; font-size: 15px; border: none; cursor: pointer;
+      transition: background .2s, transform .15s;
+      text-decoration: none; display: inline-block;
+    }
+    .btn-primary:hover { background: #a80d25; transform: translateY(-2px); }
+    .btn-outline {
+      background: transparent; color: #fff;
+      padding: 14px 28px; border-radius: 8px;
+      font-weight: 600; font-size: 15px;
+      border: 1.5px solid rgba(255,255,255,0.35); cursor: pointer;
+      transition: border-color .2s, transform .15s;
+      text-decoration: none; display: inline-block;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+    .hero-stats {
+      margin-top: 56px; display: flex; gap: 36px; flex-wrap: wrap;
+      animation: fadeUp .7s .45s ease both;
+    }
+    .stat { border-left: 3px solid var(--red); padding-left: 16px; }
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: #fff; }
+    .stat-label { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+    /* ── SECTION BASE ── */
+    section { padding: 80px 5vw; }
+    .section-label {
+      font-size: 12px; font-weight: 600; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--red);
+      margin-bottom: 12px;
+    }
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 4vw, 46px);
+      font-weight: 700; line-height: 1.15; color: var(--navy);
+    }
+    h2 span { color: var(--red); }
+    .section-intro {
+      margin-top: 16px; font-size: 17px; color: var(--gray);
+      line-height: 1.8; max-width: 640px;
+    }
+
+    /* ── WHAT IS OSSD ── */
+    .ossd-split {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+      align-items: center; margin-top: 52px;
+    }
+    .ossd-text p { font-size: 16px; color: #444; line-height: 1.9; margin-bottom: 16px; }
+    .ossd-card-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    }
+    .info-card {
+      background: var(--white);
+      border-radius: 14px; padding: 24px;
+      border: 1px solid rgba(0,0,0,0.07);
+      box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .info-card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,0.09); }
+    .info-card .icon { font-size: 26px; margin-bottom: 10px; }
+    .info-card h4 { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+    .info-card p  { font-size: 13px; color: var(--gray); line-height: 1.6; }
+
+    /* ── WHY OSSD ── */
+    .why-bg { background: var(--navy); }
+    .why-bg h2, .why-bg .section-label { color: var(--cream); }
+    .why-bg h2 span { color: var(--gold); }
+    .why-bg .section-intro { color: rgba(255,255,255,0.55); }
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px; margin-top: 48px;
+    }
+    .why-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px; padding: 28px;
+      transition: background .2s;
+    }
+    .why-card:hover { background: rgba(255,255,255,0.09); }
+    .why-card .num {
+      font-family: 'Playfair Display', serif;
+      font-size: 40px; font-weight: 900; color: var(--red);
+      opacity: 0.5; line-height: 1; margin-bottom: 12px;
+    }
+    .why-card h3 { font-size: 17px; font-weight: 600; color: #fff; margin-bottom: 10px; }
+    .why-card p  { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.8; }
+
+    /* ── PROGRAM STRUCTURE ── */
+    .structure-bg { background: var(--white); }
+    .structure-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px; margin-top: 48px;
+    }
+    .struct-card {
+      border-radius: 16px; padding: 32px;
+      border: 2px solid transparent;
+      background: var(--cream);
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .struct-card:hover { border-color: var(--red); box-shadow: 0 6px 24px rgba(200,16,46,0.1); }
+    .struct-icon {
+      width: 52px; height: 52px; border-radius: 12px;
+      background: var(--red); display: flex; align-items: center;
+      justify-content: center; font-size: 22px; margin-bottom: 18px;
+    }
+    .struct-card h3 { font-size: 19px; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+    .struct-card p  { font-size: 14px; color: var(--gray); line-height: 1.8; }
+    .struct-card ul { margin-top: 12px; padding-left: 16px; }
+    .struct-card ul li { font-size: 13px; color: var(--gray); line-height: 1.9; }
+
+    /* ── CREDIT REQUIREMENTS ── */
+    .credit-section { background: var(--cream); }
+    .credit-table-wrap {
+      margin-top: 48px;
+      background: var(--white); border-radius: 20px;
+      overflow: hidden; box-shadow: 0 4px 32px rgba(0,0,0,0.07);
+    }
+    .credit-table-head {
+      background: var(--navy); color: #fff;
+      display: grid; grid-template-columns: 3fr 1fr 2fr;
+      padding: 16px 28px; font-size: 13px; font-weight: 600;
+      letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .credit-row {
+      display: grid; grid-template-columns: 3fr 1fr 2fr;
+      padding: 18px 28px; border-bottom: 1px solid rgba(0,0,0,0.06);
+      align-items: center; transition: background .15s;
+    }
+    .credit-row:hover { background: var(--light); }
+    .credit-row:last-child { border-bottom: none; }
+    .credit-row .subject { font-weight: 500; color: var(--navy); font-size: 15px; }
+    .credit-row .credits {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-weight: 700; color: var(--red);
+    }
+    .credit-row .note { font-size: 13px; color: var(--gray); }
+    .credit-total {
+      background: var(--navy); color: #fff;
+      display: grid; grid-template-columns: 3fr 1fr 2fr;
+      padding: 20px 28px;
+    }
+    .credit-total .subject { font-weight: 700; font-size: 16px; }
+    .credit-total .credits {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px; font-weight: 900; color: var(--gold);
+    }
+
+    /* ── PATHWAY ── */
+    .pathway-bg { background: var(--white); }
+    .pathway-steps {
+      margin-top: 56px;
+      display: flex; flex-direction: column; gap: 0;
+      max-width: 760px;
+    }
+    .step {
+      display: flex; gap: 28px; align-items: flex-start;
+      padding-bottom: 36px; position: relative;
+    }
+    .step:not(:last-child)::after {
+      content: '';
+      position: absolute; left: 24px; top: 52px;
+      width: 2px; bottom: 0;
+      background: linear-gradient(to bottom, var(--red), rgba(200,16,46,0.1));
+    }
+    .step-circle {
+      flex-shrink: 0;
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--red); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif; font-weight: 700; font-size: 18px;
+    }
+    .step-body h3 { font-size: 19px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+    .step-body p  { font-size: 15px; color: var(--gray); line-height: 1.8; }
+
+    /* ── ACCREDITATION ── */
+    .accred-bg { background: var(--light); }
+    .accred-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px; margin-top: 48px;
+    }
+    .accred-card {
+      background: var(--white); border-radius: 14px; padding: 28px 20px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      transition: transform .2s;
+    }
+    .accred-card:hover { transform: translateY(-4px); }
+    .accred-card .flag { font-size: 36px; margin-bottom: 10px; }
+    .accred-card h4 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .accred-card p  { font-size: 12px; color: var(--gray); line-height: 1.6; }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: var(--red); text-align: center;
+      padding: 100px 5vw;
+    }
+    .cta-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(30px, 5vw, 56px);
+      color: #fff; margin-bottom: 20px;
+    }
+    .cta-section p { color: rgba(255,255,255,0.75); font-size: 18px; max-width: 560px; margin: 0 auto 36px; line-height: 1.7; }
+    .cta-btns { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+    .btn-white {
+      background: #fff; color: var(--red);
+      padding: 15px 32px; border-radius: 8px;
+      font-weight: 700; font-size: 15px; border: none; cursor: pointer;
+      transition: background .2s, transform .15s;
+      text-decoration: none;
+    }
+    .btn-white:hover { background: var(--cream); transform: translateY(-2px); }
+    .btn-ghost {
+      background: transparent; color: #fff;
+      padding: 15px 32px; border-radius: 8px;
+      font-weight: 600; font-size: 15px;
+      border: 2px solid rgba(255,255,255,0.5); cursor: pointer;
+      transition: border-color .2s, transform .15s;
+      text-decoration: none;
+    }
+    .btn-ghost:hover { border-color: #fff; transform: translateY(-2px); }
+
+    /* ── FAQ ── */
+    .faq-bg { background: var(--cream); }
+    .faq-list { max-width: 760px; margin-top: 48px; }
+    details {
+      background: var(--white); border-radius: 12px;
+      padding: 0; margin-bottom: 12px;
+      border: 1px solid rgba(0,0,0,0.07);
+      overflow: hidden; transition: box-shadow .2s;
+    }
+    details[open] { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+    summary {
+      padding: 20px 24px; font-weight: 600; font-size: 16px;
+      color: var(--navy); cursor: pointer; list-style: none;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    summary::after { content: '+'; font-size: 22px; color: var(--red); font-weight: 300; }
+    details[open] summary::after { content: '−'; }
+    .faq-answer { padding: 0 24px 20px; font-size: 15px; color: var(--gray); line-height: 1.8; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy); color: rgba(255,255,255,0.5);
+      padding: 40px 5vw; text-align: center;
+      font-size: 14px;
+    }
+    footer strong { color: #fff; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .ossd-split { grid-template-columns: 1fr; }
+      nav ul { display: none; }
+      .credit-table-head, .credit-row, .credit-total { grid-template-columns: 2fr 1fr; }
+      .credit-row .note, .credit-table-head span:last-child, .credit-total span:last-child { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-icon">I</div>
+    <div>
+      <div class="nav-logo-text">ICEC</div>
+      <span class="nav-logo-sub">International College of Education Canada</span>
+    </div>
+  </div>
+  <ul>
+    <li><a href="#about">About OSSD</a></li>
+    <li><a href="#structure">Program</a></li>
+    <li><a href="#pathway">Pathway</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <button class="nav-cta">Book Consultation</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-maple">🍁</div>
+  <div class="hero-content">
+    <div class="hero-badge">Ontario Secondary School Diploma</div>
+    <h1>Earn a <span>Top-Ranked</span><br/>Canadian High School<br/>Diploma Online</h1>
+    <p class="hero-sub">Fast-track your pathway to top global universities with the OSSD Program at ICEC — fully accredited, internationally recognized, and designed for ambitious students worldwide.</p>
+    <div class="hero-btns">
+      <a href="#" class="btn-primary">📄 Download Brochure</a>
+      <a href="#" class="btn-outline">📅 Book a Free Consultation</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">30</div>
+        <div class="stat-label">Credits Required</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">1–2</div>
+        <div class="stat-label">Years to Complete</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">150+</div>
+        <div class="stat-label">Universities Accepted</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT IS OSSD -->
+<section id="about" class="structure-bg">
+  <div class="section-label">About the Program</div>
+  <h2>What is the <span>OSSD?</span></h2>
+  <p class="section-intro">The Ontario Secondary School Diploma (OSSD) is the official high school graduation credential issued by the Province of Ontario, Canada — one of the most respected educational systems in the world.</p>
+
+  <div class="ossd-split">
+    <div class="ossd-text">
+      <p>Issued under the authority of the Ontario Ministry of Education, the OSSD is recognized by universities and colleges across Canada, the United States, the United Kingdom, Australia, and many other countries worldwide.</p>
+      <p>At ICEC, we deliver the OSSD program through a flexible online format specifically designed to meet the needs of international students — allowing you to study at your own pace while meeting rigorous Canadian academic standards.</p>
+      <p>Completing the OSSD opens doors to prestigious post-secondary institutions globally and gives you the English-language academic foundation employers and universities demand.</p>
+    </div>
+    <div class="ossd-card-grid">
+      <div class="info-card">
+        <div class="icon">🏛️</div>
+        <h4>Officially Accredited</h4>
+        <p>Authorized by the Ontario Ministry of Education, Canada.</p>
+      </div>
+      <div class="info-card">
+        <div class="icon">🌍</div>
+        <h4>Globally Recognized</h4>
+        <p>Accepted by 150+ universities across 30+ countries.</p>
+      </div>
+      <div class="info-card">
+        <div class="icon">💻</div>
+        <h4>100% Online</h4>
+        <p>Study from anywhere with flexible scheduling.</p>
+      </div>
+      <div class="info-card">
+        <div class="icon">🎯</div>
+        <h4>University Pathway</h4>
+        <p>Direct pathway to top Canadian and global universities.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY OSSD -->
+<section class="why-bg">
+  <div class="section-label" style="color:rgba(255,255,255,0.5)">Why Choose OSSD</div>
+  <h2>Why the <span>OSSD</span> Matters</h2>
+  <p class="section-intro">A credential that transforms your academic and career future — here's why thousands of international students choose the OSSD each year.</p>
+
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="num">01</div>
+      <h3>World-Class Canadian Education</h3>
+      <p>Canada consistently ranks among the top education systems globally. Your OSSD reflects that standard of excellence in every subject you complete.</p>
+    </div>
+    <div class="why-card">
+      <div class="num">02</div>
+      <h3>University Admission Advantage</h3>
+      <p>The OSSD is accepted by top universities in Canada, the USA, UK, Australia, and beyond — giving you an edge in competitive university applications.</p>
+    </div>
+    <div class="why-card">
+      <div class="num">03</div>
+      <h3>English Proficiency Proof</h3>
+      <p>Completing the OSSD demonstrates English academic proficiency, which may satisfy language requirements for many universities and programs.</p>
+    </div>
+    <div class="why-card">
+      <div class="num">04</div>
+      <h3>Flexible Online Delivery</h3>
+      <p>Study from anywhere in the world. Our online platform lets you learn at your own pace while receiving support from certified Ontario teachers.</p>
+    </div>
+    <div class="why-card">
+      <div class="num">05</div>
+      <h3>Transferable Credits</h3>
+      <p>OSSD credits are recognized and transferable, helping you save time and money on your post-secondary education journey.</p>
+    </div>
+    <div class="why-card">
+      <div class="num">06</div>
+      <h3>Certified Ontario Teachers</h3>
+      <p>All courses are taught by qualified, certified Ontario teachers who provide personalized guidance and academic support throughout your studies.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAM STRUCTURE -->
+<section id="structure" class="structure-bg">
+  <div class="section-label">Program Structure</div>
+  <h2>How the <span>Program</span> is Structured</h2>
+  <p class="section-intro">The OSSD requires 30 credits and other graduation requirements, typically completed in 1–2 years depending on your prior education.</p>
+
+  <div class="structure-grid">
+    <div class="struct-card">
+      <div class="struct-icon">📚</div>
+      <h3>Compulsory Credits</h3>
+      <p>18 compulsory credits are required, covering core academic disciplines:</p>
+      <ul>
+        <li>English (4 credits)</li>
+        <li>Mathematics (3 credits)</li>
+        <li>Sciences (2 credits)</li>
+        <li>Canadian History & Geography (2 credits)</li>
+        <li>Arts, Health & Physical Education</li>
+        <li>French as a Second Language (1 credit)</li>
+        <li>Career Studies & Civics (1 credit)</li>
+      </ul>
+    </div>
+    <div class="struct-card">
+      <div class="struct-icon">🎨</div>
+      <h3>Elective Credits</h3>
+      <p>12 elective credits allow you to customize your diploma based on your university goals and career interests:</p>
+      <ul>
+        <li>Business Studies</li>
+        <li>Computer Science & Technology</li>
+        <li>Social Sciences & Humanities</li>
+        <li>Additional Sciences & Maths</li>
+        <li>Arts & Communications</li>
+        <li>Cooperative Education</li>
+      </ul>
+    </div>
+    <div class="struct-card">
+      <div class="struct-icon">✅</div>
+      <h3>Graduation Requirements</h3>
+      <p>Beyond the 30 credits, students must fulfill:</p>
+      <ul>
+        <li>Ontario Secondary School Literacy Test (OSSLT)</li>
+        <li>40 hours of Community Involvement</li>
+        <li>At least one Grade 11 or 12 course in English</li>
+        <li>Minimum Grade 12 level in subject areas required by your chosen university</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CREDIT REQUIREMENTS TABLE -->
+<section class="credit-section">
+  <div class="section-label">Credit Breakdown</div>
+  <h2>Credit <span>Requirements</span></h2>
+  <p class="section-intro">A clear overview of the credits needed to earn your Ontario Secondary School Diploma.</p>
+
+  <div class="credit-table-wrap">
+    <div class="credit-table-head">
+      <span>Requirement</span>
+      <span>Credits</span>
+      <span>Notes</span>
+    </div>
+    <div class="credit-row">
+      <div class="subject">English Language Arts</div>
+      <div class="credits">4</div>
+      <div class="note">Must include Grade 12 English</div>
+    </div>
+    <div class="credit-row">
+      <div class="subject">Mathematics</div>
+      <div class="credits">3</div>
+      <div class="note">Must include one Grade 11 or 12 course</div>
+    </div>
+    <div class="credit-row">
+      <div class="subject">Science</div>
+      <div class="credits">2</div>
+      <div class="note">From at least two different science disciplines</div>
+    </div>
+    <div class="credit-row">
+      <div class="subject">Canadian History & Geography</div>
+      <div class="credits">2</div>
+      <div class="note">One from each subject</div>
+    </div>
+    <div class="credit-row">
+      <div class="subject">Arts</div>
+      <div class="credits">1</div>
+      <div class="note">Music, Visual Arts, Drama, or Dance</div>
+    </div>
+    <div class="credit-row">
+      <div class="subject">Health & Physical Education</div>
+      <div class="credits">1</div>
+      <div class="note">—</div>
+    </div>
+    <div class="credit-row">
+      <div class="subject">French as a Second Language</div>
+      <div class="credits">1</div>
+      <div class="note">—</div>
+    </div>
+    <div class="credit-row">
+      <div class="subject">Career Studies & Civics</div>
+      <div class="credits">1</div>
+      <div class="note">0.5 credits each</div>
+    </div>
+    <div class="credit-row">
+      <div class="subject">Additional Compulsory Credits</div>
+      <div class="credits">3</div>
+      <div class="note">From Group 1, 2, and 3</div>
+    </div>
+    <div class="credit-row">
+      <div class="subject">Elective Credits</div>
+      <div class="credits">12</div>
+      <div class="note">Student's choice, per program goals</div>
+    </div>
+    <div class="credit-total">
+      <div class="subject">Total Credits Required</div>
+      <div class="credits">30</div>
+      <div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PATHWAY -->
+<section id="pathway" class="pathway-bg">
+  <div class="section-label">Your Journey</div>
+  <h2>Your <span>Pathway</span> to the OSSD</h2>
+  <p class="section-intro">From enrollment to graduation — here's how your OSSD journey at ICEC looks from start to finish.</p>
+
+  <div class="pathway-steps">
+    <div class="step">
+      <div class="step-circle">1</div>
+      <div class="step-body">
+        <h3>Free Consultation & Assessment</h3>
+        <p>Book a free consultation with our academic advisors. We'll review your current transcripts and qualifications to determine how many credits you may need and create a personalized study plan.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-circle">2</div>
+      <div class="step-body">
+        <h3>Enrollment & Course Selection</h3>
+        <p>Complete your enrollment and select your courses with guidance from your academic advisor. Courses are chosen based on your target university program and future career goals.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-circle">3</div>
+      <div class="step-body">
+        <h3>Online Learning Begins</h3>
+        <p>Access your courses through our secure online learning platform. Work through lessons, assignments, and assessments guided by certified Ontario teachers at a schedule that works for you.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-circle">4</div>
+      <div class="step-body">
+        <h3>OSSLT & Community Involvement</h3>
+        <p>Complete the Ontario Secondary School Literacy Test (OSSLT) and fulfill your 40 hours of community involvement — both mandatory graduation requirements we support you through.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-circle">5</div>
+      <div class="step-body">
+        <h3>Graduation & University Application</h3>
+        <p>Receive your official Ontario Secondary School Diploma and use your ICEC transcript to apply to universities worldwide. Our team supports you through university applications too.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACCREDITATION -->
+<section class="accred-bg">
+  <div class="section-label">Recognition</div>
+  <h2>Globally <span>Recognized</span></h2>
+  <p class="section-intro">The OSSD issued through ICEC is accepted by leading universities and institutions around the world.</p>
+  <div class="accred-grid">
+    <div class="accred-card">
+      <div class="flag">🇨🇦</div>
+      <h4>Canada</h4>
+      <p>University of Toronto, UBC, McGill, McMaster and all major Canadian institutions.</p>
+    </div>
+    <div class="accred-card">
+      <div class="flag">🇺🇸</div>
+      <h4>United States</h4>
+      <p>Accepted as a recognized high school credential for US university applications.</p>
+    </div>
+    <div class="accred-card">
+      <div class="flag">🇬🇧</div>
+      <h4>United Kingdom</h4>
+      <p>Recognized by UCAS and UK universities as an equivalent qualification.</p>
+    </div>
+    <div class="accred-card">
+      <div class="flag">🇦🇺</div>
+      <h4>Australia</h4>
+      <p>Accepted by Australian universities for undergraduate admission.</p>
+    </div>
+    <div class="accred-card">
+      <div class="flag">🌏</div>
+      <h4>Asia & Beyond</h4>
+      <p>Recognized in South Korea, Japan, Singapore, UAE, and 30+ other countries.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Ready to Start Your Canadian Education Journey?</h2>
+  <p>Join thousands of international students who have earned their OSSD through ICEC and gone on to study at world-class universities.</p>
+  <div class="cta-btns">
+    <a href="#" class="btn-white">📄 Download Brochure</a>
+    <a href="#" class="btn-ghost">📅 Book a Free Consultation</a>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="faq-bg">
+  <div class="section-label">Common Questions</div>
+  <h2>Frequently Asked <span>Questions</span></h2>
+  <div class="faq-list">
+    <details>
+      <summary>Who is eligible to enroll in the OSSD program?</summary>
+      <div class="faq-answer">The ICEC OSSD program is open to international students who have completed at least Grade 9 or equivalent in their home country. Our academic advisors will review your transcripts to determine your eligibility and assess which credits you may be granted based on prior learning.</div>
+    </details>
+    <details>
+      <summary>How long does it take to complete the OSSD?</summary>
+      <div class="faq-answer">Completion time varies based on your existing education and the number of credits required. Most students complete the program in 1 to 2 years. Your ICEC academic advisor will help you build a realistic timeline based on your specific situation and goals.</div>
+    </details>
+    <details>
+      <summary>Are ICEC courses taught by certified teachers?</summary>
+      <div class="faq-answer">Yes. All courses at ICEC are taught by certified Ontario teachers who are fully qualified to deliver Ontario curriculum courses. They provide ongoing guidance, feedback, and academic support throughout your studies.</div>
+    </details>
+    <details>
+      <summary>Can prior learning be credited?</summary>
+      <div class="faq-answer">Yes. Through Prior Learning Assessment and Recognition (PLAR), students may receive credit for knowledge and skills gained through previous study. Our advisors will review your existing transcripts to determine applicable credits, potentially reducing your time to graduation.</div>
+    </details>
+    <details>
+      <summary>Is the OSSD accepted for Canadian university admission?</summary>
+      <div class="faq-answer">Absolutely. The OSSD is the standard high school graduation credential in Ontario and is accepted by all Canadian universities and colleges. It is also recognized by hundreds of international institutions in the US, UK, Australia, and worldwide.</div>
+    </details>
+    <details>
+      <summary>What is the Ontario Secondary School Literacy Test (OSSLT)?</summary>
+      <div class="faq-answer">The OSSLT is a mandatory graduation requirement that assesses students' reading and writing skills in English. ICEC prepares all students for the OSSLT with dedicated support materials and practice resources to ensure you are fully ready on test day.</div>
+    </details>
+    <details>
+      <summary>How do I get started?</summary>
+      <div class="faq-answer">Start by booking a free consultation with one of our academic advisors. We'll review your background, explain the program in detail, and create a customized pathway plan for you. Click "Book a Free Consultation" at the top of this page to get started.</div>
+    </details>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>ICEC — International College of Education Canada</strong></p>
+  <p style="margin-top:8px">Ontario Ministry of Education Inspected & Accredited &nbsp;|&nbsp; OSSD Issuing Authority</p>
+  <p style="margin-top:8px">© 2025 ICEC. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
